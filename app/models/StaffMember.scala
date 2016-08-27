@@ -8,7 +8,7 @@ import scala.concurrent.Future
 /**
   * Created by Barni on 8/18/2016.
   */
-case class StaffMember(id: Long, name: String, email: String, password: String)
+case class StaffMember(id: Long, name: String, email: String, password: Option[String] = None)
 
 class StaffMemberRepo(protected val dbConfigProvider: DatabaseConfigProvider) {
   val dbConfig = dbConfigProvider.get[JdbcProfile]
@@ -30,6 +30,11 @@ class StaffMemberRepo(protected val dbConfigProvider: DatabaseConfigProvider) {
   def findByName(name: String): Future[List[StaffMember]] =
     db.run(_findByName(name).result)
 
+  def create(name: String, email: String, password: Option[String] = None) = {
+    val staffMember = StaffMember(0, name, email, password)
+    db.run(StaffMembers returning StaffMembers.map(_.id) += staffMember
+  }
+
   private class StaffMemberTable(tag: Tag) extends Table[StaffMember](tag, "STAFF_MEMBER") {
     def id = column[Long]("ID", O.AutoInc, O.PrimaryKey)
 
@@ -37,9 +42,9 @@ class StaffMemberRepo(protected val dbConfigProvider: DatabaseConfigProvider) {
 
     def email = column[String]("EMAIL")
 
-    def password = column[String]("PASSWORD")
+    def password = column[Option[String]]("PASSWORD")
 
-    def * = (id, name, email, password) <>(StaffMember.tupled, Project.unapply)
+    def * = (id, name, email, password) <> (StaffMember.tupled, Project.unapply)
 
     def ? = (id.?, name.?, email.?, password.?).shaped.<>({ r => import r._; _1.map(_ => StaffMember.tupled((_1.get, _2.get, _3.get, _4.get))) }, (_: Any) => throw new Exception("Inserting into ? projection not supported."))
 
