@@ -1,5 +1,6 @@
 package models
 
+import javax.inject.Inject
 import play.api.db.slick.DatabaseConfigProvider
 import slick.driver.JdbcProfile
 
@@ -8,9 +9,9 @@ import scala.concurrent.Future
 /**
   * Created by Barni on 8/18/2016.
   */
-case class StaffMember(id: Long, name: String, email: String, password: Option[String] = None)
+case class StaffMember(id: Long, name: String, email: String, password: String = "12345")
 
-class StaffMemberRepo(protected val dbConfigProvider: DatabaseConfigProvider) {
+class StaffMemberRepo @Inject()(protected val dbConfigProvider: DatabaseConfigProvider) {
   val dbConfig = dbConfigProvider.get[JdbcProfile]
   val db = dbConfig.db
 
@@ -30,9 +31,9 @@ class StaffMemberRepo(protected val dbConfigProvider: DatabaseConfigProvider) {
   def findByName(name: String): Future[List[StaffMember]] =
     db.run(_findByName(name).result)
 
-  def create(name: String, email: String, password: Option[String] = None) = {
-    val staffMember = StaffMember(0, name, email, password)
-    db.run(StaffMembers returning StaffMembers.map(_.id) += staffMember
+  def create(name: String, email: String) = {
+    val staffMember = StaffMember(0, name, email)
+    db.run(StaffMembers returning StaffMembers.map(_.id) += staffMember)
   }
 
   private class StaffMemberTable(tag: Tag) extends Table[StaffMember](tag, "STAFF_MEMBER") {
@@ -42,9 +43,9 @@ class StaffMemberRepo(protected val dbConfigProvider: DatabaseConfigProvider) {
 
     def email = column[String]("EMAIL")
 
-    def password = column[Option[String]]("PASSWORD")
+    def password = column[String]("PASSWORD")
 
-    def * = (id, name, email, password) <> (StaffMember.tupled, Project.unapply)
+    def * = (id, name, email, password) <> (StaffMember.tupled, StaffMember.unapply)
 
     def ? = (id.?, name.?, email.?, password.?).shaped.<>({ r => import r._; _1.map(_ => StaffMember.tupled((_1.get, _2.get, _3.get, _4.get))) }, (_: Any) => throw new Exception("Inserting into ? projection not supported."))
 

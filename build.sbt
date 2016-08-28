@@ -1,4 +1,4 @@
-name := """play-slick-example"""
+name := """Wanari reporting tool"""
 
 version := "1.0-SNAPSHOT"
 

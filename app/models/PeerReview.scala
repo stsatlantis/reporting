@@ -1,7 +1,6 @@
 package models
 
 import javax.inject.Inject
-
 import org.joda.time.DateTime
 import play.api.db.slick.DatabaseConfigProvider
 import slick.driver.JdbcProfile
@@ -13,15 +12,15 @@ import scala.concurrent.Future
   */
 case class PeerReview(id: Long, staffMember: Long, report: String, fillDate: DateTime) extends Report
 
-class PeerReviewRepo @Inject()(taskRepo: StaffMemberRepo)(protected val dbConfigProvider: DatabaseConfigProvider) {
+class PeerReviewRepo @Inject()(protected val dbConfigProvider: DatabaseConfigProvider) {
 
   val dbConfig = dbConfigProvider.get[JdbcProfile]
   val db = dbConfig.db
 
-  import dbConfig.driver.api._
   import com.github.tototoshi.slick.H2JodaSupport._
+  import dbConfig.driver.api._
 
-  private val PeerReviews = TableQuery[PeerReview]
+  private val PeerReviews = TableQuery[PeerReviewTable]
 
   private def _findById(id: Long): DBIO[Option[PeerReview]] =
     PeerReviews.filter(_.id === id).result.headOption
@@ -36,6 +35,10 @@ class PeerReviewRepo @Inject()(taskRepo: StaffMemberRepo)(protected val dbConfig
   def findByStaffMember(id: Long): Future[List[PeerReview]] =
     db.run(_findByStaffMember(id).result)
 
+  def create(staffMember: Long, report: String) = {
+    val peerReview = PeerReview(0, staffMember, report, DateTime.now())
+    db.run(PeerReviews returning PeerReviews.map(_.id) += peerReview)
+  }
 
   private class PeerReviewTable(tag: Tag) extends Table[PeerReview](tag, "PEER_REVIEW") {
     def id = column[Long]("ID", O.AutoInc, O.PrimaryKey)

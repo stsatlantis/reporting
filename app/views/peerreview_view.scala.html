@@ -1,0 +1,10 @@
+@(PeerReviewOpt: Option[PeerReview])
+
+@main("Self report - " + PeerReviewOpt.map(_.staffMember)) {
+    @PeerReviewOpt.map(review => {
+                <br/>
+        review.report
+                <br/>
+    }
+    ).getOrElse("No such entity")
+}

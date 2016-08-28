@@ -13,13 +13,13 @@ import scala.concurrent.Future
   */
 case class SelfReport(id: Long, staffMember: Long, mentor: Long, report: String, fillDate: DateTime) extends Report
 
-class SelfReportRepo @Inject()(taskRepo: StaffMemberRepo)(protected val dbConfigProvider: DatabaseConfigProvider) {
+class SelfReportRepo @Inject()(protected val dbConfigProvider: DatabaseConfigProvider) {
 
   val dbConfig = dbConfigProvider.get[JdbcProfile]
   val db = dbConfig.db
 
-  import dbConfig.driver.api._
   import com.github.tototoshi.slick.H2JodaSupport._
+  import dbConfig.driver.api._
 
   private val SelfReports = TableQuery[SelfReportTable]
 
@@ -40,6 +40,11 @@ class SelfReportRepo @Inject()(taskRepo: StaffMemberRepo)(protected val dbConfig
 
   def findByMentor(id: Long): Future[List[SelfReport]] =
     db.run(_findByMentor(id).result)
+
+  def create(staffMember: Long, mentor: Long, report: String) = {
+    val selfReport = SelfReport(0, staffMember, mentor, report, DateTime.now())
+    db.run(SelfReports returning SelfReports.map(_.id) += selfReport)
+  }
 
   private class SelfReportTable(tag: Tag) extends Table[SelfReport](tag, "SELF_REPORT") {
     def id = column[Long]("ID", O.AutoInc, O.PrimaryKey)

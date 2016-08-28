@@ -1,0 +1,22 @@
+@(reviews: List[PeerReview])
+
+@main("SelfReports") {
+    Projects:
+    <table>
+
+    @reviews.map { review =>
+        <tr>
+            <td>
+                @review.id
+            </td>
+            <td>
+            @review.fillDate
+            </td>
+            <td>
+                <a href="@routes.Reports.viewPeerReview(review.staffMember, review.id)">
+                    Details</a>
+            </td>
+        </tr>
+    }
+    </table>
+}

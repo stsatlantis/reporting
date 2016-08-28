@@ -1,0 +1,22 @@
+@(selfReports: List[SelfReport])
+
+@main("SelfReports") {
+    Projects:
+    <table>
+
+    @selfReports.map { selfReport =>
+        <tr>
+            <td>
+                @selfReport.id
+            </td>
+            <td>
+            @selfReport.fillDate
+            </td>
+            <td>
+                <a href="@routes.Reports.viewSelfReport(selfReport.staffMember, selfReport.id)">
+                    Details</a>
+            </td>
+        </tr>
+    }
+    </table>
+}

@@ -1,0 +1,10 @@
+@(selfReportOpt: Option[SelfReport])
+
+@main("Self report - " + selfReportOpt.map(_.staffMember)) {
+    @selfReportOpt.map(selfReport => {
+                <br/>
+        selfReport.report
+                <br/>
+    }
+    ).getOrElse("No such entity")
+}

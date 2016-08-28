@@ -1,14 +1,12 @@
+GET        /                                                                                      controllers.Application.index
 
+PUT        /staffmember                                                                           controllers.StaffMember.addStaffMember(name: String, email: String)
 
+GET        /staffmember/$staffMemberId<[1-9][0-9]*>/selfreport                                    controllers.Reports.fillSelfReport(staffMemberId : Long)
+GET        /staffmember/$staffMemberId<[1-9][0-9]*>/selfreports                                   controllers.Reports.listSelfReports(staffMemberId: Long)
+GET        /mentor/$staffMemberId<[1-9][0-9]*>/selfreports                                        controllers.Reports.listSelfReportsForMentor(staffMemberId: Long)
+GET        /staffmember/$staffMemberId<[1-9][0-9]*>/selfreports/$selfReportId<[1-9][0-9]*>        controllers.Reports.viewSelfReport(staffMemberId: Long, selfReportId: Long)
 
-GET           /                                                           controllers.Application.listProjects
-PUT           /projects/:name                                             controllers.Application.createProject(name: String)
-GET           /projects/list                                              controllers.Application.listProjects
-GET           /projects/:id                                               controllers.Application.projects(id: Long)
-PUT           /projects/:id/:name                                         controllers.Application.addTaskToProject(name: String, id: Long)
-PATCH         /tasks/:id                                                  controllers.Application.modifyTask(id: Long, color:Option[String] ?= None)
-
-PUT           /staffmember/:name/:email                                   controllers.StaffMember.addStaffMember(name: String, email: String)
-
-
-DELETE        /projects/:name                                             controllers.Application.delete(name: String)
+GET        /staffmember/$staffMemberId<[1-9][0-9]*>/peerreview                                    controllers.Reports.fillPeerReview(staffMemberId: Long)
+GET        /staffmember/$staffMemberId<[1-9][0-9]*>/peerreviews                                   controllers.Reports.listPeerReviews(staffMemberId: Long)
+GET        /staffmember/$staffMemberId<[1-9][0-9]*>/peerreviews/$peerReviewId<[1-9][0-9]*>        controllers.Reports.viewPeerReview(staffMemberId : Long, peerReviewId: Long)
