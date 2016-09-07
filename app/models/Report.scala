@@ -7,8 +7,6 @@ import org.joda.time.DateTime
   */
 
 trait Report {
-  def id: Long
-
   def report: String
 
   def fillDate: DateTime
