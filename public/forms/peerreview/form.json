@@ -1,0 +1,27 @@
+[
+  "name",
+  {
+    "type": "help",
+    "helpvalue": "<h2>Personal</h2>"
+  },
+  "whatup",
+  "pastLoved",
+  "pastToChange",
+  "pastBestColleague",
+  {
+    "type": "help",
+    "helpvalue": "<h2>Work related</h2>"
+  },
+  "teamPros",
+  "teamCons",
+  "teamRandom",
+  "workPast",
+  "workPastHard",
+  "workFuture",
+  "comment",
+  {
+    "type": "submit",
+    "style": "btn-info",
+    "title": "OK"
+  }
+]
