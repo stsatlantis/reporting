@@ -36,7 +36,7 @@ class PersonRepo @Inject()(protected val dbConfigProvider: DatabaseConfigProvide
     db.run(Persons returning Persons.map(_.id) += person)
   }
 
-  private class PersonTable(tag: Tag) extends Table[Person](tag, "STAFF_MEMBER") {
+  private class PersonTable(tag: Tag) extends Table[Person](tag, "PERSON") {
     def id = column[Long]("ID", O.AutoInc, O.PrimaryKey)
 
     def name = column[String]("NAME")
