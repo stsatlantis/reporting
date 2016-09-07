@@ -1,0 +1,56 @@
+{
+  "type": "object",
+  "title": "report",
+  "properties": {
+    "name": {
+      "title": "Name",
+      "type": "string"
+    },
+    "whatsup": {
+      "title": "What's up? How are you? How's the school going?",
+      "type": "string",
+      "placeholder": "Leave a comment"
+    },
+    "pastLoved": {
+      "title": "What did you loved to do the most in tha past 2 weeks?",
+      "type": "string"
+    },
+    "pastToChange": {
+      "title": "What would you change about your work in the past 2 weeks?",
+      "type": "string"
+    },
+    "pastBestColleague": {
+      "title": "Which of your colleagues put the most effort into work? Why?",
+      "type": "string"
+    },
+    "teamPros": {
+      "title": "Team positive:",
+      "type": "string"
+    },
+    "teamCons": {
+      "title": "Team negatives:",
+      "type": "string"
+    },
+    "teamRandom": {
+      "title": "Team random:",
+      "type": "string"
+    },
+    "workPast": {
+      "title": "Tasks in the past 2 weeks:",
+      "type": "string"
+    },
+    "workPastHard": {
+      "title": "Hardest tasks:",
+      "type": "string"
+    },
+    "workFuture": {
+      "title": "Tasks in the future",
+      "type": "string"
+    },
+    "comment": {
+      "title": "Comment",
+      "type": "string",
+      "placeholder": "Leave a comment"
+    }
+  }
+}

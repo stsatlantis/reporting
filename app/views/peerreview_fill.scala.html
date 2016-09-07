@@ -1,1 +1,24 @@
 @()
+
+@scripts = {
+    <script type="text/javascript" src="@routes.Assets.at("vendor/angular/angular.min.js")"></script>
+    <script type="text/javascript" src="@routes.Assets.at("vendor/angular-sanitize/angular-sanitize.min.js")"></script>
+    <script type="text/javascript" src="@routes.Assets.at("vendor/tv4/tv4.js")"></script>
+    <script type="text/javascript" src="@routes.Assets.at("vendor/objectpath/ObjectPath.js")"></script>
+    <script type="text/javascript" src="@routes.Assets.at("vendor/angular-schema-form/schema-form.min.js")"></script>
+    <script type="text/javascript" src="@routes.Assets.at("vendor/angular-schema-form/bootstrap-decorator.min.js")"></script>
+    <script type="text/javascript" src="@routes.Assets.at("forms/peerreview/peerreview.js")"></script>
+}
+
+@styles = {
+
+}
+
+@main(title = "Peer review - ", scripts = scripts) {
+    <div class="container" ng-app="SelfReport" >
+        <div ng-controller="SelfReportController as vm">
+            <form id="myForm" name="myForm" sf-schema="vm.schema" sf-form="vm.form" sf-model="vm.model" ng-submit="vm.onSubmit(myForm)"></form>
+        </div>
+    </div>
+
+}
