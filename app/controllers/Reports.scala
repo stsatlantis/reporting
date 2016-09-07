@@ -11,39 +11,39 @@ import play.api.mvc.{Action, Controller}
   */
 class Reports @Inject()(peerReviewRepo: PeerReviewRepo, selfReportRepo: SelfReportRepo) extends Controller {
 
-  def fillSelfReport(staffMember: Long) = Action { implicit rs =>
-    Ok(views.html.selfreport_fill(staffMember))
+  def fillSelfReport(reporter: Long) = Action { implicit rs =>
+    Ok(views.html.selfreport_fill(reporter))
   }
 
-  def createSelfReport(staffMember: Long, mentor: Long, report: String) = Action.async { implicit rs =>
-    selfReportRepo create(staffMember: Long, mentor: Long, report: String) map (id => Ok(s"Self report with $id created"))
+  def createSelfReport(reporter: Long, mentor: Long, report: String) = Action.async { implicit rs =>
+    selfReportRepo create(reporter: Long, mentor: Long, report: String) map (id => Ok(s"Self report with $id created"))
   }
 
-  def listSelfReports(staffMember: Long) = Action.async { implicit rs =>
-    selfReportRepo findByStaffMember staffMember map (selfReports => Ok(views.html.selfreports(selfReports)))
+  def listSelfReports(reporter: Long) = Action.async { implicit rs =>
+    selfReportRepo findByReporter reporter map (selfReports => Ok(views.html.selfreports(selfReports)))
   }
 
   def listSelfReportsForMentor(mentor: Long) = Action.async { implicit rs =>
     selfReportRepo findByMentor mentor map (selfReports => Ok(views.html.selfreports(selfReports)))
   }
 
-  def viewSelfReport(staffMember: Long, selfReport: Long) = Action.async { implicit rs =>
+  def viewSelfReport(selfReport: Long) = Action.async { implicit rs =>
     selfReportRepo findById selfReport map (selfReport => Ok(views.html.selfreport_view(selfReport)))
   }
 
-  def createPeerReview(staffMember: Long, mentor: Long, report: String) = Action.async { implicit rs =>
-    peerReviewRepo create(staffMember: Long, report: String) map (id => Ok(s"Self report with $id created"))
+  def createPeerReview(reportee: Long, report: String) = Action.async { implicit rs =>
+    peerReviewRepo create(reportee: Long, report: String) map (id => Ok(s"Self report with $id created"))
   }
 
-  def listPeerReviews(staffMember: Long) = Action.async { implicit rs =>
-    peerReviewRepo findByStaffMember staffMember map (review => Ok(views.html.peerreviews(review)))
+  def listPeerReviews(reportee: Long) = Action.async { implicit rs =>
+    peerReviewRepo findByReportee reportee map (review => Ok(views.html.peerreviews(review)))
   }
 
-  def viewPeerReview(staffMember: Long, peerReview: Long) = Action.async { implicit rs =>
+  def viewPeerReview(peerReview: Long) = Action.async { implicit rs =>
     peerReviewRepo findById peerReview map (review => Ok(views.html.peerreview_view(review)))
   }
 
-  def fillPeerReview(staffMember: Long) = Action { implicit  rs =>
-    Ok(views.html.peerreview_fill(staffMember))
+  def fillPeerReview = Action { implicit rs =>
+    Ok(views.html.peerreview_fill())
   }
 }

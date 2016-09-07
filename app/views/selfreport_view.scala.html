@@ -1,6 +1,6 @@
 @(selfReportOpt: Option[SelfReport])
 
-@main("Self report - " + selfReportOpt.map(_.staffMember)) {
+@main("Self report - " + selfReportOpt.map(_.reporter)) {
     @selfReportOpt.map(selfReport => {
                 <br/>
         selfReport.report

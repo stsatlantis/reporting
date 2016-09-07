@@ -9,8 +9,6 @@ import org.joda.time.DateTime
 trait Report {
   def id: Long
 
-  def staffMember: Long
-
   def report: String
 
   def fillDate: DateTime

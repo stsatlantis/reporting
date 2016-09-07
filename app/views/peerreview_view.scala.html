@@ -1,6 +1,6 @@
 @(PeerReviewOpt: Option[PeerReview])
 
-@main("Self report - " + PeerReviewOpt.map(_.staffMember)) {
+@main("Self report - " + PeerReviewOpt.map(_.reportee)) {
     @PeerReviewOpt.map(review => {
                 <br/>
         review.report

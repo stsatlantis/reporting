@@ -1,12 +1,16 @@
-GET        /                                                                                      controllers.Application.index
+GET        /                                                 controllers.Application.index
 
-PUT        /staffmember                                                                           controllers.StaffMember.addStaffMember(name: String, email: String)
+PUT        /person                                           controllers.Persons.addPerson(name: String, email: String)
+PUT        /selfreport                                       controllers.Reports.createSelfReport(reporter :Long, mentor: Long, report: String)
+PUT        /peerreview                                       controllers.Reports.createPeerReview(reportee: Long, report: String)
 
-GET        /staffmember/$staffMemberId<[1-9][0-9]*>/selfreport                                    controllers.Reports.fillSelfReport(staffMemberId : Long)
-GET        /staffmember/$staffMemberId<[1-9][0-9]*>/selfreports                                   controllers.Reports.listSelfReports(staffMemberId: Long)
-GET        /mentor/$staffMemberId<[1-9][0-9]*>/selfreports                                        controllers.Reports.listSelfReportsForMentor(staffMemberId: Long)
-GET        /staffmember/$staffMemberId<[1-9][0-9]*>/selfreports/$selfReportId<[1-9][0-9]*>        controllers.Reports.viewSelfReport(staffMemberId: Long, selfReportId: Long)
+GET        /person/$personId<[1-9][0-9]*>/selfreports        controllers.Reports.listSelfReports(personId: Long)
+GET        /mentor/$personId<[1-9][0-9]*>/selfreports        controllers.Reports.listSelfReportsForMentor(personId: Long)
+GET        /person/$personId<[1-9][0-9]*>/selfreport         controllers.Reports.fillSelfReport(personId : Long)
+GET        /selfreports/$selfReportId<[1-9][0-9]*>           controllers.Reports.viewSelfReport(selfReportId: Long)
 
-GET        /staffmember/$staffMemberId<[1-9][0-9]*>/peerreview                                    controllers.Reports.fillPeerReview(staffMemberId: Long)
-GET        /staffmember/$staffMemberId<[1-9][0-9]*>/peerreviews                                   controllers.Reports.listPeerReviews(staffMemberId: Long)
-GET        /staffmember/$staffMemberId<[1-9][0-9]*>/peerreviews/$peerReviewId<[1-9][0-9]*>        controllers.Reports.viewPeerReview(staffMemberId : Long, peerReviewId: Long)
+GET        /peerreviews                                      controllers.Reports.listPeerReviews(personId: Long)
+GET        /peerreviews/fill                                 controllers.Reports.fillPeerReview
+GET        /peerreviews/$peerReviewId<[1-9][0-9]*>           controllers.Reports.viewPeerReview(peerReviewId : Long)
+
+GET        /assets/*file                                     controllers.Assets.at(path = "/public/",file: String)

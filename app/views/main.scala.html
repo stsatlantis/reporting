@@ -1,13 +1,15 @@
-@(title: String)(content: Html)
+@(title: String, scripts: Html = Html(""), styles: Html = Html(""))(content: Html)
 <!DOCTYPE html>
 
 <html>
     <head>
         <title>@title</title>
+        @styles
     </head>
     <body>
 	   	<div >
 	        @content	        
 	    </div>
+        @scripts
     </body>
 </html>

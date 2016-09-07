@@ -11,7 +11,7 @@ import scala.concurrent.Future
 /**
   * Created by Barni on 8/18/2016.
   */
-case class SelfReport(id: Long, staffMember: Long, mentor: Long, report: String, fillDate: DateTime) extends Report
+case class SelfReport(id: Long, reporter: Long, mentor: Long, report: String, fillDate: DateTime) extends Report
 
 class SelfReportRepo @Inject()(protected val dbConfigProvider: DatabaseConfigProvider) {
 
@@ -26,8 +26,8 @@ class SelfReportRepo @Inject()(protected val dbConfigProvider: DatabaseConfigPro
   private def _findById(id: Long): DBIO[Option[SelfReport]] =
     SelfReports.filter(_.id === id).result.headOption
 
-  private def _findByStaffMember(id: Long): Query[SelfReportTable, SelfReport, List] =
-    SelfReports.filter(_.staffMember === id).sortBy(_.fillDate.desc).to[List]
+  private def _findByReporter(id: Long): Query[SelfReportTable, SelfReport, List] =
+    SelfReports.filter(_.reporter === id).sortBy(_.fillDate.desc).to[List]
 
   private def _findByMentor(id: Long): Query[SelfReportTable, SelfReport, List] =
     SelfReports.filter(_.mentor === id).sortBy(_.fillDate.desc).to[List]
@@ -35,21 +35,21 @@ class SelfReportRepo @Inject()(protected val dbConfigProvider: DatabaseConfigPro
   def findById(id: Long): Future[Option[SelfReport]] =
     db.run(_findById(id))
 
-  def findByStaffMember(id: Long): Future[List[SelfReport]] =
-    db.run(_findByStaffMember(id).result)
+  def findByReporter(id: Long): Future[List[SelfReport]] =
+    db.run(_findByReporter(id).result)
 
   def findByMentor(id: Long): Future[List[SelfReport]] =
     db.run(_findByMentor(id).result)
 
-  def create(staffMember: Long, mentor: Long, report: String) = {
-    val selfReport = SelfReport(0, staffMember, mentor, report, DateTime.now())
+  def create(reporter: Long, mentor: Long, report: String) = {
+    val selfReport = SelfReport(0, reporter, mentor, report, DateTime.now())
     db.run(SelfReports returning SelfReports.map(_.id) += selfReport)
   }
 
   private class SelfReportTable(tag: Tag) extends Table[SelfReport](tag, "SELF_REPORT") {
     def id = column[Long]("ID", O.AutoInc, O.PrimaryKey)
 
-    def staffMember = column[Long]("STAFF_MEMBER")
+    def reporter = column[Long]("REPORTER")
 
     def mentor = column[Long]("MENTOR")
 
@@ -57,9 +57,9 @@ class SelfReportRepo @Inject()(protected val dbConfigProvider: DatabaseConfigPro
 
     def fillDate = column[DateTime]("FILL_DATE")
 
-    def * = (id, staffMember, mentor, report, fillDate) <> (SelfReport.tupled, SelfReport.unapply)
+    def * = (id, reporter, mentor, report, fillDate) <> (SelfReport.tupled, SelfReport.unapply)
 
-    def ? = (id.?, staffMember.?, mentor.?, report.?, fillDate.?).shaped.<>({ r => import r._; _1.map(_ => SelfReport.tupled((_1.get, _2.get, _3.get, _4.get, _5.get))) }, (_: Any) => throw new Exception("Inserting into ? projection not supported."))
+    def ? = (id.?, reporter.?, mentor.?, report.?, fillDate.?).shaped.<>({ r => import r._; _1.map(_ => SelfReport.tupled((_1.get, _2.get, _3.get, _4.get, _5.get))) }, (_: Any) => throw new Exception("Inserting into ? projection not supported."))
   }
 
 }
