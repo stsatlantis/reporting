@@ -10,7 +10,7 @@ GET        /person/$personId<[1-9][0-9]*>/selfreport         controllers.Reports
 GET        /selfreports/$selfReportId<[1-9][0-9]*>           controllers.Reports.viewSelfReport(selfReportId: Long)
 
 GET        /peerreviews                                      controllers.Reports.listPeerReviews(personId: Long)
-GET        /peerreviews/fill                                 controllers.Reports.fillPeerReview
+GET        /peerreviews/$reportee<[1-9][0-9]*>/fill          controllers.Reports.fillPeerReview(reportee: Long)
 GET        /peerreviews/$peerReviewId<[1-9][0-9]*>           controllers.Reports.viewPeerReview(peerReviewId : Long)
 
 GET        /assets/*file                                     controllers.Assets.at(path = "/public/",file: String)

@@ -36,7 +36,7 @@ class PeerReviewRepo @Inject()(protected val dbConfigProvider: DatabaseConfigPro
   def findByReportee(id: Long): Future[List[PeerReview]] =
     db.run(_findByReportee(id).result)
 
-  def create(reportee: Long, report: String) = {
+  def create(reportee: Long, report: String): Future[Long] = {
     val peerReview = PeerReview(id = 0, reportee = reportee, report = report, fillDate = DateTime.now())
     db.run(PeerReviews returning PeerReviews.map(_.id) += peerReview)
   }

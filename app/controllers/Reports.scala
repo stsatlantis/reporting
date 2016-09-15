@@ -2,14 +2,16 @@ package controllers
 
 import javax.inject.Inject
 
-import models.{PeerReviewRepo, SelfReportRepo}
+import models.{PeerReviewRepo, PersonRepo, SelfReportRepo}
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import play.api.mvc.{Action, Controller}
+
+import scala.concurrent.Future
 
 /**
   * Created by Barni on 8/20/2016.
   */
-class Reports @Inject()(peerReviewRepo: PeerReviewRepo, selfReportRepo: SelfReportRepo) extends Controller {
+class Reports @Inject()(peerReviewRepo: PeerReviewRepo, selfReportRepo: SelfReportRepo, personRepo: PersonRepo) extends Controller {
 
   def fillSelfReport(reporter: Long) = Action { implicit rs =>
     Ok(views.html.selfreport_fill(reporter))
@@ -43,7 +45,14 @@ class Reports @Inject()(peerReviewRepo: PeerReviewRepo, selfReportRepo: SelfRepo
     peerReviewRepo findById peerReview map (review => Ok(views.html.peerreview_view(review)))
   }
 
-  def fillPeerReview = Action { implicit rs =>
-    Ok(views.html.peerreview_fill())
+  def fillPeerReview(reportee: Long) = Action.async { implicit rs =>
+    personRepo findById reportee map {
+      case Some(person) => Ok(views.html.peerreview_fill(person))
+      case None => Redirect(routes.Application.index())
+    }
+  }
+
+  def savePeerReview(reportee: Long) = Action.async { implicit rs =>
+    rs.body.asText.fold(Future(Redirect(routes.Application.index())))(peerReviewRepo create(reportee, _) map (id => Redirect(routes.Reports.viewPeerReview(id))))
   }
 }
